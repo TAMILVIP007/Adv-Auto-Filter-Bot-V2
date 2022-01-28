@@ -16,17 +16,17 @@ async def start(bot, update):
         file_uid = update.command[1]
     except IndexError:
         file_uid = False
-    
+
     if file_uid:
         file_id, file_name, file_caption, file_type = await db.get_file(file_uid)
-        
-        if (file_id or file_type) == None:
+
+        if ((file_id or file_type)) is None:
             return
-        
+
         caption = file_caption if file_caption != ("" or None) else ("<code>" + file_name + "</code>")
-        
+
         if file_type == "document":
-        
+
             await bot.send_document(
                 chat_id=update.chat.id,
                 document = file_id,
@@ -46,7 +46,7 @@ async def start(bot, update):
             )
 
         elif file_type == "video":
-        
+
             await bot.send_video(
                 chat_id=update.chat.id,
                 video = file_id,
@@ -63,9 +63,9 @@ async def start(bot, update):
                     ]
                 )
             )
-            
+
         elif file_type == "audio":
-        
+
             await bot.send_audio(
                 chat_id=update.chat.id,
                 audio = file_id,
@@ -85,7 +85,7 @@ async def start(bot, update):
 
         else:
             print(file_type)
-        
+
         return
 
     buttons = [[
@@ -96,9 +96,9 @@ async def start(bot, update):
     ],[
         InlineKeyboardButton('Help ⚙', callback_data="help")
     ]]
-    
+
     reply_markup = InlineKeyboardMarkup(buttons)
-    
+
     await bot.send_message(
         chat_id=update.chat.id,
         text=Translation.START_TEXT.format(
